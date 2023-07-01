@@ -97,7 +97,7 @@
   ```javascript
   import { UserContext } from '../../context/userContext';
   &
-  import { seContext } from 'react';
+  import { useContext } from 'react';
   ```
 
   Do initialization to dispatch data to context :
