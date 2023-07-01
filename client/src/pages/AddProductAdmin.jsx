@@ -27,6 +27,23 @@ export default function AddProductAdmin() {
 
   // if you have entered the fetching material from the web service then create a function here to replace the fake data categories
 
+  // For handle if category selected
+  const handleChangeCategoryId = (e) => {
+    const id = e.target.value;
+    const checked = e.target.checked;
+
+    if (checked) {
+      // Save category id if checked
+      setForm({ ...form, category_id: [...form.category_id, id] });
+    } else {
+      // Delete category id from variable if unchecked
+      let newCategoryId = form.category_id.filter((categoryId) => {
+        return categoryId != id;
+      });
+      setForm({ ...form, category_id: newCategoryId });
+    }
+  };
+
   // Handle change data product on form
   const handleChange = (e) => {
     setForm({

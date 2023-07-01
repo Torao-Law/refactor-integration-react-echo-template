@@ -6,6 +6,7 @@ import DeleteData from '../components/modal/DeleteData';
 import NavbarAdmin from '../components/NavbarAdmin';
 import imgEmpty from '../assets/empty.svg';
 import products from '../fakeData/product'
+import { useNavigate } from 'react-router-dom'
 // delete all fake from import if you have entered the fetching material from the web service
 // import useMutation, useQuery, API here 
 
@@ -13,6 +14,8 @@ export default function ProductAdmin() {
   // set title in tab header browser
   const title = 'Product admin';
   document.title = 'DumbMerch | ' + title;
+
+  let navigate = useNavigate()
 
   // activate this function after creating the function to handle delete data
   // const [idDelete, setIdDelete] = useState(null);

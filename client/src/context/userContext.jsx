@@ -11,12 +11,17 @@ const reducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    // code here
     case 'LOGIN_SUCCESS':
+      // code here
       return {
         isLogin: true,
         user: payload,
       };
+      
+    // code here
     case 'LOGOUT':
+      // code here
       return {
         isLogin: false,
         user: {},

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Container, Row, Table } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'
 import DeleteData from '../components/modal/DeleteData';
 import NavbarAdmin from '../components/NavbarAdmin';
 import imgEmpty from '../assets/empty.svg';
@@ -11,6 +12,8 @@ export default function CategoryAdmin() {
   // set title in tab header browser
   const title = 'Category admin';
   document.title = 'DumbMerch | ' + title;
+
+  let navigate = useNavigate();
   
   // activate this function after creating the function to handle delete data
   // const [idDelete, setIdDelete] = useState(null);
