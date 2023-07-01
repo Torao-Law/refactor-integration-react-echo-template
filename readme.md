@@ -34,7 +34,6 @@ Before doing the integration, we make some preparations, including:
   - Setup for CORS
 
     ```go
-	  e := echo.New()
 
     e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
       AllowOrigins: []string{"*"},
@@ -42,15 +41,6 @@ Before doing the integration, we make some preparations, including:
       AllowHeaders: []string{"X-Requested-With", "Content-Type", "Authorization"},
     }))
 
-    mysql.DatabaseInit()
-    database.RunMigration()
-
-    routes.RouteInit(e.Group("/api/v1"))
-
-    e.Static("/uploads", "./uploads")
-
-    fmt.Println("server running localhost:5000")
-    e.Logger.Fatal(e.Start("localhost:5000"))
     ```
 
 ## Client Side
@@ -104,18 +94,15 @@ Before doing the integration, we make some preparations, including:
   - Init Client :
 
     ```javascript
-    const client = new QueryClient();
+    const client = new QueryClient()
 
-    ReactDOM.render(
+    ReactDOM.createRoot(document.getElementById('root')).render(
       <React.StrictMode>
         <UserContextProvider>
           <QueryClientProvider client={client}>
-            <Router>
-              <App />
-            </Router>
+            <App />
           </QueryClientProvider>
         </UserContextProvider>
       </React.StrictMode>,
-      document.getElementById("root")
-    );
+    )
     ```
