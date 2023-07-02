@@ -192,6 +192,118 @@
   }
   ```
 
+* Check Auth for stay login if refresh page
+
+  > File : `client/src/App.jsx`
+
+  Get API config & setAuthToken :
+
+  ```javascript
+  import { API, setAuthToken } from './config/api';
+  ```
+
+  Import privateroute that we have in components :
+
+  ```javascript
+  import { PrivateRouteAdmin, PrivateRouteLogin, PrivateRouteUser } from './components/PrivateRoute';
+  ```
+
+  Import usecontext and UserContext that we have made :
+
+  ```javascript
+  import { useContext, useEffect, useState } from 'react';
+  import { UserContext } from './context/userContext';
+  ```
+
+  Init user context and isloading state :
+
+  ```javascript
+  const [state, dispatch] = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true)
+  ```
+
+  Check user token :
+
+  ```javascript
+  
+  const checkUser = async () => {
+    try {
+      const response = await API.get('/check-auth');
+
+      // Get user data
+      let payload = response.data.data;
+
+      // Get token from local storage
+      payload.token = localStorage.getItem("token");
+
+      // Send data to useContext
+      dispatch({
+        type: 'USER_SUCCESS',
+        payload,
+      });
+
+      setIsLoading(false)
+    } catch (error) {
+      console.log("check user failed : ", error);
+      dispatch({
+        type: 'AUTH_ERROR',
+      });
+      setIsLoading(false)
+    }
+  };
+
+ 
+  useEffect(() => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.getItem("token"));
+      checkUser();
+    } else {
+      setIsLoading(false)
+    }
+  }, []);
+  ```
+
+  Redirect Auth :
+
+  ```javascript
+  useEffect(() => {
+    // Redirect Auth but just when isLoading is false
+    if (!isLoading) {
+      if (state.isLogin === false) {
+        navigate('/auth');
+      }
+    }
+  }, [isLoading]);
+  ```
+
+  Make the return become like this :
+
+  ```jsx
+  {isLoading ? null :
+    <Routes>
+      <Route path="/auth" element={<Auth />} />
+      <Route element={<PrivateRouteLogin />} >
+        <Route element={<PrivateRouteUser />} >
+          <Route exact path="/" element={<Product />} />
+          <Route path="/product/:id" element={<DetailProduct />} />
+          <Route path="/complain" element={<Complain />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+        <Route element={<PrivateRouteAdmin />} >
+          <Route path="/complain-admin" element={<ComplainAdmin />} />
+          <Route path="/category-admin" element={<CategoryAdmin />} />
+          <Route path="/update-category/:id" element={<UpdateCategoryAdmin />} />
+          <Route path="/add-category" element={<AddCategoryAdmin />} />
+          <Route path="/product-admin" element={<ProductAdmin />} />
+          <Route path="/add-product" element={<AddProductAdmin />} />
+          <Route path="/update-product/:id" element={<UpdateProductAdmin />} />
+        </Route>
+      </Route>
+    </Routes>
+  }
+  ```
+
+
 - Insert category data
 
   > File : `client/src/pages/AddCategoryAdmin.jsx`
@@ -324,118 +436,6 @@
   to
   ```html
   <form onSubmit={(e) => handleSubmit.mutate(e)}>
-  ```
-
-
-* Check Auth for stay login if refresh page
-
-  > File : `client/src/App.jsx`
-
-  Get API config & setAuthToken :
-
-  ```javascript
-  import { API, setAuthToken } from './config/api';
-  ```
-
-  Import privateroute that we have in components :
-
-  ```javascript
-  import { PrivateRouteAdmin, PrivateRouteLogin, PrivateRouteUser } from './components/PrivateRoute';
-  ```
-
-  Import usecontext and UserContext that we have made :
-
-  ```javascript
-  import { useContext, useEffect, useState } from 'react';
-  import { UserContext } from './context/userContext';
-  ```
-
-  Init user context and isloading state :
-
-  ```javascript
-  const [state, dispatch] = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(true)
-  ```
-
-  Check user token :
-
-  ```javascript
-  
-  const checkUser = async () => {
-    try {
-      const response = await API.get('/check-auth');
-
-      // Get user data
-      let payload = response.data.data;
-
-      // Get token from local storage
-      payload.token = localStorage.getItem("token");
-
-      // Send data to useContext
-      dispatch({
-        type: 'USER_SUCCESS',
-        payload,
-      });
-
-      setIsLoading(false)
-    } catch (error) {
-      console.log("check user failed : ", error);
-      dispatch({
-        type: 'AUTH_ERROR',
-      });
-      setIsLoading(false)
-    }
-  };
-
- 
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.getItem("token"));
-      checkUser();
-    } else {
-      setIsLoading(false)
-    }
-  }, []);
-  ```
-
-  Redirect Auth :
-
-  ```javascript
-  useEffect(() => {
-    // Redirect Auth but just when isLoading is false
-    if (!isLoading) {
-      if (state.isLogin === false) {
-        navigate('/auth');
-      }
-    }
-  }, [isLoading]);
-  ```
-
-  Make the return become like this :
-
-  ```jsx
-  {isLoading ? null :
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      <Route element={<PrivateRouteLogin />} >
-        <Route element={<PrivateRouteUser />} >
-          <Route exact path="/" element={<Product />} />
-          <Route path="/product/:id" element={<DetailProduct />} />
-          <Route path="/complain" element={<Complain />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-        <Route element={<PrivateRouteAdmin />} >
-          <Route path="/complain-admin" element={<ComplainAdmin />} />
-          <Route path="/category-admin" element={<CategoryAdmin />} />
-          <Route path="/update-category/:id" element={<UpdateCategoryAdmin />} />
-          <Route path="/add-category" element={<AddCategoryAdmin />} />
-          <Route path="/product-admin" element={<ProductAdmin />} />
-          <Route path="/add-product" element={<AddProductAdmin />} />
-          <Route path="/update-product/:id" element={<UpdateProductAdmin />} />
-        </Route>
-      </Route>
-    </Routes>
-  }
   ```
 
 
